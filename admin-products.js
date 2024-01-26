@@ -32,6 +32,11 @@ createApp({
           alert(error.response.data.message);
         });
     },
+    editData() {
+      axios.put(
+        `${this.apiUrl}/api/${this.apiPath}/admin/products/${this.tempProduct.id}`
+      );
+    },
   },
   mounted() {
     // 取出 Token
