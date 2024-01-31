@@ -17,7 +17,9 @@
     <div id="app">
       <div class="container">
         <div class="text-end mt-4">
-          <button class="btn btn-primary">建立新的產品</button>
+          <button class="btn btn-primary" @click="openModal('new')">
+            建立新的產品
+          </button>
         </div>
         <table class="table mt-4">
           <thead>
@@ -42,10 +44,18 @@
               </td>
               <td>
                 <div class="btn-group">
-                  <button type="button" class="btn btn-outline-primary btn-sm">
+                  <button
+                    @click="openModal('edit')"
+                    type="button"
+                    class="btn btn-outline-primary btn-sm"
+                  >
                     編輯
                   </button>
-                  <button type="button" class="btn btn-outline-danger btn-sm">
+                  <button
+                    @click="openModal('delete')"
+                    type="button"
+                    class="btn btn-outline-danger btn-sm"
+                  >
                     刪除
                   </button>
                 </div>
@@ -67,7 +77,8 @@
           <div class="modal-content border-0">
             <div class="modal-header bg-dark text-white">
               <h5 id="productModalLabel" class="modal-title">
-                <span>新增產品</span>
+                <span v-if="isNew">新增產品</span>
+                <span v-else>編輯產品</span>
               </h5>
               <button
                 type="button"
@@ -88,9 +99,14 @@
                         type="text"
                         class="form-control"
                         placeholder="請輸入圖片連結"
+                        v-model="tempProduct.imageUrl"
                       />
                     </div>
-                    <img class="img-fluid" src="" alt="" />
+                    <img
+                      class="img-fluid"
+                      :src="tempProduct.imageUrl"
+                      :alt="tempProduct.imageUrl"
+                    />
                   </div>
                   <div>
                     <button
@@ -106,6 +122,9 @@
                   </div>
                 </div>
                 <div class="col-sm-8">
+                  <pre>
+                    {{tempProduct}}
+                  </pre>
                   <div class="mb-3">
                     <label for="title" class="form-label">標題</label>
                     <input
@@ -113,6 +132,7 @@
                       type="text"
                       class="form-control"
                       placeholder="請輸入標題"
+                      v-model="tempProduct.title"
                     />
                   </div>
 
@@ -124,6 +144,7 @@
                         type="text"
                         class="form-control"
                         placeholder="請輸入分類"
+                        v-model="tempProduct.category"
                       />
                     </div>
                     <div class="mb-3 col-md-6">
@@ -133,6 +154,7 @@
                         type="text"
                         class="form-control"
                         placeholder="請輸入單位"
+                        v-model="tempProduct.unit"
                       />
                     </div>
                   </div>
@@ -146,6 +168,7 @@
                         min="0"
                         class="form-control"
                         placeholder="請輸入原價"
+                        v-model.number="tempProduct.origin_price"
                       />
                     </div>
                     <div class="mb-3 col-md-6">
@@ -156,6 +179,7 @@
                         min="0"
                         class="form-control"
                         placeholder="請輸入售價"
+                        v-model.number="tempProduct.price"
                       />
                     </div>
                   </div>
@@ -168,6 +192,7 @@
                       type="text"
                       class="form-control"
                       placeholder="請輸入產品描述"
+                      v-model="tempProduct.description"
                     >
                     </textarea>
                   </div>
@@ -178,6 +203,7 @@
                       type="text"
                       class="form-control"
                       placeholder="請輸入說明內容"
+                      v-model="tempProduct.content"
                     >
                     </textarea>
                   </div>
@@ -189,6 +215,7 @@
                         type="checkbox"
                         :true-value="1"
                         :false-value="0"
+                        v-model="tempProduct.is_enabled"
                       />
                       <label class="form-check-label" for="is_enabled"
                         >是否啟用</label
@@ -244,7 +271,9 @@
               >
                 取消
               </button>
-              <button type="button" class="btn btn-danger">確認刪除</button>
+              <button @click="deleteData" type="button" class="btn btn-danger">
+                確認刪除
+              </button>
             </div>
           </div>
         </div>
