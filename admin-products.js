@@ -37,7 +37,21 @@ createApp({
           this.products = res.data.products;
         })
         .catch((error) => {
-          alert(error.response.data.message);
+          alert(error.data.message);
+        });
+    },
+    postData() {
+      axios
+        .post(`${this.apiUrl}/api/${this.apiPath}/admin/product`, {
+          data: this.tempProduct,
+        })
+        .then((res) => {
+          productModal.hide();
+          this.tempProduct = {};
+          this.getData();
+        })
+        .catch((error) => {
+          alert(error.data.message);
         });
     },
     editData() {
