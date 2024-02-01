@@ -71,12 +71,16 @@ createApp({
           alert(error.response);
         });
     },
-    openModal(isNew) {
+    openModal(isNew, product) {
       if (isNew === "new") {
         this.isNew = true;
+        this.tempProduct = {
+          imageUrl: [],
+        };
         productModal.show();
       } else if (isNew === "edit") {
         this.isNew = false;
+        this.tempProduct = { ...product };
         productModal.show();
       } else if (isNew === "delete") {
         delProductModal.show();
