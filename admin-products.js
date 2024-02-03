@@ -1,4 +1,4 @@
-import { createApp } from "https://unpkg.com/vue@3/dist/vue.esm-browser.js";
+import { createApp } from 'https://unpkg.com/vue@3/dist/vue.esm-browser.js';
 
 let productModal = null;
 let delProductModal = null;
@@ -7,11 +7,11 @@ createApp({
   data() {
     return {
       apiUrl: `https://ec-course-api.hexschool.io/v2`,
-      apiPath: "santu",
+      apiPath: 'santu',
       products: [],
       tempProduct: {
         imageUrl: [
-          "https://images.unsplash.com/photo-1706545512961-dde803e08f5e?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+          'https://images.unsplash.com/photo-1706545512961-dde803e08f5e?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
         ],
       },
       isNew: false,
@@ -27,7 +27,7 @@ createApp({
         })
         .catch((error) => {
           alert(error.data.message);
-          window.location = "index.html";
+          window.location = 'index.html';
         });
     },
     getData() {
@@ -40,24 +40,26 @@ createApp({
           alert(error.data.message);
         });
     },
-    postData() {
-      axios
-        .post(`${this.apiUrl}/api/${this.apiPath}/admin/product`, {
-          data: this.tempProduct,
-        })
+    editData() {
+      // 新增
+      let api = `${this.apiUrl}/api/${this.apiPath}/admin/product`;
+      let method = 'post';
+
+      // 修改
+      if (!this.isNew) {
+        api = `${this.apiUrl}/api/${this.apiPath}/admin/product/${this.tempProduct.id}`;
+        method = 'put';
+      }
+      axios[method](api, { data: this.tempProduct })
         .then((res) => {
+          this.getData();
           productModal.hide();
           this.tempProduct = {};
-          this.getData();
+          alert(res.data.message);
         })
         .catch((error) => {
           alert(error.data.message);
         });
-    },
-    editData() {
-      axios.put(
-        `${this.apiUrl}/api/${this.apiPath}/admin/products/${this.tempProduct.id}`
-      );
     },
     deleteData() {
       axios
@@ -65,24 +67,24 @@ createApp({
           `${this.apiUrl}/api/${this.apiPath}/admin/products/${this.products.id}`
         )
         .then((res) => {
-          alert("刪除成功");
+          alert('刪除成功');
         })
         .catch((error) => {
           alert(error.response);
         });
     },
     openModal(isNew, product) {
-      if (isNew === "new") {
+      if (isNew === 'new') {
         this.isNew = true;
         this.tempProduct = {
           imageUrl: [],
         };
         productModal.show();
-      } else if (isNew === "edit") {
+      } else if (isNew === 'edit') {
         this.isNew = false;
         this.tempProduct = { ...product };
         productModal.show();
-      } else if (isNew === "delete") {
+      } else if (isNew === 'delete') {
         delProductModal.show();
       }
     },
@@ -92,24 +94,24 @@ createApp({
     const token = document.cookie.replace(
       // 須與瀏覽器中的key一致
       /(?:(?:^|.*;\s*)week3Token\s*=\s*([^;]*).*$)|^.*$/,
-      "$1"
+      '$1'
     );
     axios.defaults.headers.common.Authorization = token;
 
     this.checkAdmin();
 
     productModal = new bootstrap.Modal(
-      document.getElementById("productModal"),
+      document.getElementById('productModal'),
       {
         keyboard: false,
       }
     );
 
     delProductModal = new bootstrap.Modal(
-      document.getElementById("delProductModal"),
+      document.getElementById('delProductModal'),
       {
         keyboard: false,
       }
     );
   },
-}).mount("#app");
+}).mount('#app');
