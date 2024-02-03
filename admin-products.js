@@ -10,9 +10,7 @@ createApp({
       apiPath: 'santu',
       products: [],
       tempProduct: {
-        imageUrl: [
-          'https://images.unsplash.com/photo-1706545512961-dde803e08f5e?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-        ],
+        imageUrl: [],
       },
       isNew: false,
     };
@@ -64,10 +62,12 @@ createApp({
     deleteData() {
       axios
         .delete(
-          `${this.apiUrl}/api/${this.apiPath}/admin/products/${this.products.id}`
+          `${this.apiUrl}/api/${this.apiPath}/admin/product/${this.tempProduct.id}`
         )
         .then((res) => {
           alert('刪除成功');
+          this.getData();
+          delProductModal.hide();
         })
         .catch((error) => {
           alert(error.response);
@@ -84,7 +84,11 @@ createApp({
         this.isNew = false;
         this.tempProduct = { ...product };
         productModal.show();
+        if(!Array.isArray(this.tempProduct.imageUrl)){
+          this.tempProduct.imageUrl = []
+        }
       } else if (isNew === 'delete') {
+        this.tempProduct = { ...product }
         delProductModal.show();
       }
     },
